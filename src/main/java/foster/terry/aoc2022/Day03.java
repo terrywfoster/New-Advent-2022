@@ -1,6 +1,5 @@
 package foster.terry.aoc2022;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,15 +16,12 @@ public class Day03 {
         this.priority = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
 
-    public int priorityTotal()
-    {
+    public int priorityTotal() {
         int priorityTotal = 0;
         for(String rucksack : rucksacks)
         {
-            Set<Character> compartment1 = rucksack.substring(0,rucksack.length()/2)
-                    .chars().mapToObj(e->(char)e).collect(Collectors.toSet());
-            Set<Character> compartment2 = rucksack.substring(rucksack.length()/2)
-                    .chars().mapToObj(e->(char)e).collect(Collectors.toSet());
+            final Set<Character> compartment1 = characterSet(rucksack.substring(0,rucksack.length()/2));
+            final Set<Character> compartment2 = characterSet(rucksack.substring(rucksack.length()/2));
 
             compartment1.retainAll(compartment2);
 
@@ -37,29 +33,30 @@ public class Day03 {
         return priorityTotal;
     }
 
-    public int badgeTotal(final int groupSize)
-    {
-        int currGroupSize = 0, badgeTotal = 0;
-        Set<Character> prevRuckSackItems = new HashSet<>();
-        for(String rucksack : rucksacks) {
-            currGroupSize++;
-            Set<Character> rucksackItems = rucksack.chars().mapToObj(e->(char)e).collect(Collectors.toSet());
+    public int badgeTotal(final int groupSize) {
 
-            if (!prevRuckSackItems.isEmpty())
-                rucksackItems.retainAll(prevRuckSackItems);
-
-            if (currGroupSize == groupSize) {
-                for(char item : rucksackItems) {
-                    badgeTotal += priority.indexOf(item) + 1;
-                }
-
-                currGroupSize = 0;
-                prevRuckSackItems = new HashSet<>();
-                continue;
+        int badgeTotal = 0;
+        for(int x = 0; x < rucksacks.size(); x += groupSize)
+        {
+            final Set<Character> firstRucksackItems = characterSet(rucksacks.get(x));
+            for(int y = 0; y < groupSize-1; y++)
+            {
+                final Set<Character> nextRucksackItems = characterSet(rucksacks.get(x + y + 1));
+                firstRucksackItems.retainAll(nextRucksackItems);
             }
-            prevRuckSackItems = rucksackItems;
 
+            for(char item : firstRucksackItems) {
+                badgeTotal += priority.indexOf(item) + 1;
+            }
+            System.out.println();
         }
         return badgeTotal;
+
+
+    }
+
+    private Set<Character> characterSet(final String items) {
+
+        return items.chars().mapToObj(e->(char)e).collect(Collectors.toSet());
     }
 }
