@@ -10,28 +10,33 @@ import org.junit.Test;
 
 public class Day01Test {
     @Test
-    public void day1Part1() throws IOException, URISyntaxException {
-        String dayOneTestInput = new String(Files.readAllBytes(Paths.get(
+    public void part1() throws IOException, URISyntaxException {
+        final var dayOneTestInput = Files.readAllLines(Paths.get(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("Day01/TestInput.txt"))
-                        .toURI())));
-        String dayOnePuzzleInput = new String(Files.readAllBytes(Paths.get(
+                        .toURI()));
+        final var dayOnePuzzleInput = Files.readAllLines(Paths.get(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("Day01/PuzzleInput.txt"))
-                        .toURI())));
+                        .toURI()));
 
-        Assertions.assertThat(Day01.day1(dayOneTestInput, 1)).isEqualTo(24000);
-        Assertions.assertThat(Day01.day1(dayOnePuzzleInput, 1)).isEqualTo(70698);
+        final Day01 part1Test = new Day01(dayOneTestInput);
+        final Day01 part1Puzzle = new Day01(dayOnePuzzleInput);
+
+        Assertions.assertThat(part1Test.totalTopCalories(1)).isEqualTo(24000);
+        Assertions.assertThat(part1Puzzle.totalTopCalories(1)).isEqualTo(70698);
     }
     @Test
-    public void day1Part2() throws IOException, URISyntaxException {
-        String dayOneTestInput = new String(Files.readAllBytes(Paths.get(
+    public void part2() throws IOException, URISyntaxException {
+        final var dayOneTestInput = Files.readAllLines(Paths.get(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("Day01/TestInput.txt"))
-                        .toURI())));
-        String dayOnePuzzleInput = new String(Files.readAllBytes(Paths.get(
+                        .toURI()));
+        final var dayOnePuzzleInput = Files.readAllLines(Paths.get(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("Day01/PuzzleInput.txt"))
-                        .toURI())));
+                        .toURI()));
 
-        Assertions.assertThat(Day01.day1(dayOneTestInput, 2)).isEqualTo(45000);
-        Assertions.assertThat(Day01.day1(dayOnePuzzleInput, 2)).isEqualTo(206643);
+        final Day01 part2Test = new Day01(dayOneTestInput);
+        final Day01 part2Puzzle = new Day01(dayOnePuzzleInput);
+
+        Assertions.assertThat(part2Test.totalTopCalories(3)).isEqualTo(45000);
+        Assertions.assertThat(part2Puzzle.totalTopCalories(3)).isEqualTo(206643);
     }
-
 }

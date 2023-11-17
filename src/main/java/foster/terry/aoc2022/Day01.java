@@ -1,46 +1,32 @@
 package foster.terry.aoc2022;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.*;
 
 public class Day01 {
-    public static int day1(String input, int whichPart) {
+    private final List<Integer> calorieTotals = new ArrayList<>();
 
-        PriorityQueue<Integer> topCalories = new PriorityQueue<>(3);
+    public Day01(final List<String> input)
+    {
+        int currentCalories = 0;
+        Iterator<String> iterator = input.iterator();
 
-        int maxCalories = 0, currentCalories = 0;
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            // process the line
-            if (line != null && !line.trim().isEmpty())
-            {
+        while (iterator.hasNext())
+        {
+            final String line = iterator.next();
+
+            if (!line.isBlank())
                 currentCalories += Integer.parseInt(line);
-            }
-            if (line == null || line.trim().isEmpty() || !scanner.hasNextLine())
-            {
-                if (maxCalories < currentCalories ) {
-                    maxCalories = currentCalories;
-                }
-                topCalories.add(currentCalories);
-                if (topCalories.size() > 3)
-                    topCalories.poll();
+
+            if (line.isBlank() || !iterator.hasNext()) {
+
+                calorieTotals.add(currentCalories);
 
                 currentCalories = 0;
             }
         }
-        scanner.close();
-
-        Integer[] arrCalories = topCalories.toArray(new Integer[0]);
-        int totalTopCalories = Arrays.stream(arrCalories)
-                .mapToInt(Integer::intValue)
-                .sum();
-        if (whichPart == 1)
-        {
-            return maxCalories;
-        }
-        return totalTopCalories;
     }
 
+    public int totalTopCalories(int limit) {
+        return calorieTotals.stream().sorted(Comparator.reverseOrder()).mapToInt(v -> v).limit(limit).sum();
+    }
 }
