@@ -21,8 +21,8 @@ public class Day02Test {
         final Day02 part1Test = new Day02(dayOneTestInput);
         final Day02 part1Puzzle = new Day02(dayOnePuzzleInput);
 
-        Assertions.assertThat(part1Test.part1()).isEqualTo(15);
-        Assertions.assertThat(part1Puzzle.part1()).isEqualTo(10624);
+        Assertions.assertThat(part1Test.totalScore()).isEqualTo(15);
+        Assertions.assertThat(part1Puzzle.totalScore()).isEqualTo(10624);
     }
     @Test
     public void part2() throws IOException, URISyntaxException {
@@ -36,7 +36,7 @@ public class Day02Test {
         final Day02 part2Test = new Day02(dayOneTestInput);
         final Day02 part2Puzzle = new Day02(dayOnePuzzleInput);
 
-        Assertions.assertThat(part2Test.part2()).isEqualTo(12);
-        Assertions.assertThat(part2Puzzle.part2()).isEqualTo(14060);
+        Assertions.assertThat(part2Test.totalDecodedScore()).isEqualTo(12);
+        Assertions.assertThat(part2Puzzle.totalDecodedScore()).isEqualTo(14060);
     }
 }

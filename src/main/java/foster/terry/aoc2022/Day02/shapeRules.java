@@ -1,16 +1,12 @@
 package foster.terry.aoc2022.Day02;
 
 public class shapeRules {
-    public String myShape;
-    public String shape;
-    public int playScore;
-    public String winShape;
-    public String loseShape;
+    public int shape;
+    public int winShape;
+    public int loseShape;
 
-    public shapeRules(String myShape, String shape, int playScore, String winShape, String loseShape) {
-        this.myShape = myShape;
+    public shapeRules(int shape, int winShape, int loseShape) {
         this.shape = shape;
-        this.playScore = playScore;
         this.winShape = winShape;
         this.loseShape = loseShape;
     }

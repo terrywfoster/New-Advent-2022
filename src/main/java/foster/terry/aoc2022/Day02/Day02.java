@@ -10,35 +10,34 @@ public class Day02 {
 
     public Day02(final List<String> input)
     {
-        this.shapes.add(new shapeRules(myShapeName.ROCK.value, theirShapeName.ROCK.value, 1, theirShapeName.SCISSORS.value, theirShapeName.PAPER.value));
-        this.shapes.add(new shapeRules(myShapeName.PAPER.value, theirShapeName.PAPER.value, 2, theirShapeName.ROCK.value, theirShapeName.SCISSORS.value));
-        this.shapes.add(new shapeRules(myShapeName.SCISSORS.value, theirShapeName.SCISSORS.value, 3, theirShapeName.PAPER.value, theirShapeName.ROCK.value));
+        this.shapes.add(new shapeRules(shapeNames.ROCK.value, shapeNames.SCISSORS.value, shapeNames.PAPER.value));
+        this.shapes.add(new shapeRules(shapeNames.PAPER.value, shapeNames.ROCK.value, shapeNames.SCISSORS.value));
+        this.shapes.add(new shapeRules(shapeNames.SCISSORS.value, shapeNames.PAPER.value, shapeNames.ROCK.value));
 
         this.lines = input;
     }
 
-    public int part1()
+    public int totalScore()
     {
         int totalScore = 0;
         for(String line : lines)
         {
-            // process the line
-            String[] guidePlays = line.split(" ");
-            String theirShape = guidePlays[0];
-            String myAction = guidePlays[1];
+            final int theirShape = line.charAt(0) - 'A';
+            final int myShape = line.charAt(2) - 'X';
 
-            shapeRules playShape = shapes.stream().filter(s -> myAction.equals(s.myShape)).findAny().orElse(null);
+            final shapeRules playShape = shapes.stream().filter(s -> myShape == s.shape).findAny().orElse(null);
             if (playShape != null)
             {
-                totalScore += playShape.playScore;
+                //Add score for shape played
+                totalScore += myShape + 1;
 
-                //Determine win score
-                if (playShape.winShape.equals(theirShape))
+                //Determine outcome score
+                if (playShape.winShape == theirShape)
                 {
                     totalScore += 6;
                 }
                 //Determine draw score
-                if (playShape.shape.equals(theirShape))
+                if (playShape.shape == theirShape)
                 {
                     totalScore += 3;
                 }
@@ -50,37 +49,25 @@ public class Day02 {
         return totalScore;
     }
 
-    public int part2()
+
+    public int totalDecodedScore()
     {
         int totalScore = 0;
         for(String line : lines)
         {
-            // process the line
-            String[] guidePlays = line.split(" ");
-            String theirShape = guidePlays[0];
-            String myAction = guidePlays[1];
+            final int theirShape = line.charAt(0) - 'A';
+            final int outcome = line.charAt(2) - 'X';
 
-            shapeRules myShape = shapes.stream().filter(s ->
-                        (theirShape.equals(s.winShape) && myAction.equals(actionName.WIN.value))
+            final shapeRules myShape = shapes.stream().filter(s ->
+                        (theirShape == s.winShape && outcome == actionNames.WIN.value)
                         ||
-                        (theirShape.equals(s.shape) && myAction.equals(actionName.TIE.value))
+                        (theirShape == s.shape && outcome == actionNames.TIE.value)
                         ||
-                        (theirShape.equals(s.loseShape) && myAction.equals(actionName.LOSE.value))
+                        (theirShape == s.loseShape && outcome == actionNames.LOSE.value)
                         ).findAny().orElse(null);
             if (myShape != null)
             {
-                totalScore += myShape.playScore;
-
-                //Determine win score
-                if ( myAction.equals(actionName.WIN.value) )
-                {
-                    totalScore += 6;
-                }
-                //Determine tie score
-                if ( myAction.equals(actionName.TIE.value) )
-                {
-                    totalScore += 3;
-                }
+                totalScore += myShape.shape + 1 + (outcome * 3);
             }
         }
 
