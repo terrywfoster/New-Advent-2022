@@ -21,7 +21,10 @@ public class Day08 {
 
         for (int y = 1; y < treeGrid.size()-1; y++) {
             for (int x = 1; x < treeGrid.get(y).size()-1; x++) {
-                if (checkTop(x,y) || checkBottom(x,y) || checkLeft(x,y) || checkRight(x,y)) {
+                if (checkTopTreesSeen(x,y,1) == y
+                        || checkBottomTreesSeen(x,y,1) == (treeGrid.size() - 1) - y
+                        || checkLeftTreesSeen(x,y,1) == x
+                        || checkRightTreesSeen(x,y,1) == (treeGrid.get(y).size() - 1) - x) {
                     totalCount++;
                 }
             }
@@ -33,7 +36,7 @@ public class Day08 {
         List<Integer> scores = new ArrayList<>();
         for (int y = 0; y < treeGrid.size(); y++) {
             for (int x = 0; x < treeGrid.get(y).size(); x++) {
-                scores.add(checkTopTreesSeen(x,y) * checkBottomTreesSeen(x,y) * checkLeftTreesSeen(x,y) * checkRightTreesSeen(x,y));
+                scores.add(checkTopTreesSeen(x,y,0) * checkBottomTreesSeen(x,y,0) * checkLeftTreesSeen(x,y,0) * checkRightTreesSeen(x,y,0));
             }
         }
 
@@ -41,74 +44,38 @@ public class Day08 {
 
     }
 
-    public boolean checkTop(int xCoord, int yCoord)
+    public int checkTopTreesSeen(int xCoord, int yCoord, int less)
     {
         for (int y = yCoord - 1; y >= 0; y--) {
             if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(y).get(xCoord)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    public int checkTopTreesSeen(int xCoord, int yCoord)
-    {
-        for (int y = yCoord - 1; y >= 0; y--) {
-            if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(y).get(xCoord)) {
-                return yCoord - y;
+                return yCoord - y - less;
             }
         }
         return yCoord;
     }
-    public boolean checkBottom(int xCoord, int yCoord)
+    public int checkBottomTreesSeen(int xCoord, int yCoord, int less)
     {
         for (int y = yCoord + 1; y < treeGrid.size(); y++) {
             if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(y).get(xCoord)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    public int checkBottomTreesSeen(int xCoord, int yCoord)
-    {
-        for (int y = yCoord + 1; y < treeGrid.size(); y++) {
-            if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(y).get(xCoord)) {
-                return y - yCoord;
+                return y - yCoord - less;
             }
         }
         return treeGrid.size() - 1 - yCoord;
     }
-    public boolean checkLeft(int xCoord, int yCoord)
+    public int checkLeftTreesSeen(int xCoord, int yCoord, int less)
     {
         for (int x = xCoord - 1; x >= 0; x--) {
             if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(yCoord).get(x)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    public int checkLeftTreesSeen(int xCoord, int yCoord)
-    {
-        for (int x = xCoord - 1; x >= 0; x--) {
-            if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(yCoord).get(x)) {
-                return xCoord - x;
+                return xCoord - x - less;
             }
         }
         return xCoord;
     }
-    public boolean checkRight(int xCoord, int yCoord)
+    public int checkRightTreesSeen(int xCoord, int yCoord, int less)
     {
         for (int x = xCoord + 1; x < treeGrid.get(yCoord).size(); x++) {
             if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(yCoord).get(x)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    public int checkRightTreesSeen(int xCoord, int yCoord)
-    {
-        for (int x = xCoord + 1; x < treeGrid.get(yCoord).size(); x++) {
-            if (treeGrid.get(yCoord).get(xCoord) <= treeGrid.get(yCoord).get(x)) {
-                return x - xCoord;
+                return x - xCoord - less;
             }
         }
         return treeGrid.get(yCoord).size() - 1 - xCoord;
