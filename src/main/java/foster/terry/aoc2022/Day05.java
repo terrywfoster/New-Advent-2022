@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Day05 {
-    final List<int[]> commands = new ArrayList<>();
-    final List<List<String>> stacks = new ArrayList<>();
+    private final List<int[]> commands = new ArrayList<>();
+    private final List<List<String>> stacks = new ArrayList<>();
 
     public Day05(final List<String> input) {
         int splitRow = 0;
@@ -25,7 +25,7 @@ public class Day05 {
         //work back from split and load stacks
         for (int x = splitRow-2; x >= 0; x--)
         {
-            String row = input.get(x) + " ";
+            final String row = input.get(x) + " ";
 
             for(int y = 0; y <= row.length()-4; y += 4)
             {
@@ -58,15 +58,15 @@ public class Day05 {
     public void move(int version, int howMany, int fromCol, int toCol) {
         List<String> fromStack = stacks.get(fromCol);
         List<String> toStack = stacks.get(toCol);
-        int fromSize = fromStack.size();
+        final int fromSize = fromStack.size();
         for(int x = 0; x < howMany; x++) {
-            String item;
+            String crate;
             int itemIndex = fromStack.size() - 1;
             if (version == 9001)
                 itemIndex = fromSize - howMany;
-            item = fromStack.get(itemIndex);
+            crate = fromStack.get(itemIndex);
             fromStack.remove(itemIndex);
-            toStack.add(item);
+            toStack.add(crate);
         }
     }
 }
