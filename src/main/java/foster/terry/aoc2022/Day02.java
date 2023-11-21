@@ -1,4 +1,4 @@
-package foster.terry.aoc2022.Day02;
+package foster.terry.aoc2022;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +72,43 @@ public class Day02 {
         }
 
         return totalScore;
+    }
+
+    public static class shapeRules {
+        public int shape;
+        public int winShape;
+        public int loseShape;
+
+        public shapeRules(int shape, int winShape, int loseShape) {
+            this.shape = shape;
+            this.winShape = winShape;
+            this.loseShape = loseShape;
+        }
+    }
+    public enum shapeNames {
+        ROCK(0),
+        PAPER(1),
+        SCISSORS(2);
+
+        public final int value;
+
+        shapeNames(int value)
+        {
+            this.value = value;
+        }
+    }
+    public enum actionNames {
+        WIN(2),
+        TIE(1),
+        LOSE(0);
+
+        public final int value;
+
+        actionNames(int value)
+        {
+            this.value = value;
+        }
+
     }
 }
 

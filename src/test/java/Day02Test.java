@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-import foster.terry.aoc2022.Day02.Day02;
+import foster.terry.aoc2022.Day02;
 import org.junit.Test;
 import org.assertj.core.api.Assertions;
 
