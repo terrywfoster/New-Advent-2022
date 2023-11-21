@@ -3,24 +3,11 @@ package foster.terry.aoc2022;
 import java.util.*;
 
 public class Day07 {
-    final private String id;
-    final private String name;
-    private int size;
-    final private List<Day07> contents;
-    final private String parent;
-    final private boolean isFolder;
-    private Map<String, Integer> directorySizes;
+    private final Directory files = new Directory("/", 0, "", true);
+    private final Map<String, Integer> directorySizes = new HashMap<>();
 
     public Day07(final List<String> input) {
-        this.id = UUID.randomUUID().toString();
-        this.name = "/";
-        this.size = 0;
-        this.contents = new ArrayList<>();
-        this.parent = "";
-        this.isFolder = true;
-        directorySizes = new Hashtable<>();
-
-        Day07 currentDirectory = this;
+        Directory currentDirectory = files;
         //Process through input
         for(int x = 1; x < input.size(); x++) {
             String line = input.get(x);
@@ -29,18 +16,18 @@ public class Day07 {
                     //move up a directory
 
                     //find parent directory node
-                    currentDirectory = findParent(this, currentDirectory == null ? "" : currentDirectory.parent);
-                    if (currentDirectory != null) { updateFolderSize(currentDirectory); }
+                    currentDirectory = files.findParent(currentDirectory == null ? "" : currentDirectory.parent);
+                    if (currentDirectory != null) { currentDirectory.updateFolderSize(); }
                 }
                 else if (line.contains("$ cd")) {
                     //move into a directory
 
                     if (currentDirectory != null) {
-                        updateFolderSize(currentDirectory);
+                        currentDirectory.updateFolderSize();
 
                         //find directory node
                         String folder = line.split(" ")[2];
-                        currentDirectory = moveInto(currentDirectory, folder);
+                        currentDirectory = currentDirectory.moveInto(folder);
                     }
 
                 }
@@ -58,64 +45,13 @@ public class Day07 {
                 }
 
                 if (currentDirectory != null) {
-                    currentDirectory.addchild(new Day07(UUID.randomUUID().toString(), file[1], size, currentDirectory.id, _isFolder));
-                    updateFolderSize(currentDirectory);
+                    currentDirectory.addchild(new Directory(file[1], size, currentDirectory.id, _isFolder));
+                    currentDirectory.updateFolderSize();
                 }
             }
         }
-        updateFolderSize(this);
+        files.updateFolderSize();
     }
-    public Day07(final String id, final String name, final int size, final String parent, final boolean isFolder) {
-        this.id = id;
-        this.name = name;
-        this.size = size;
-        this.parent = parent;
-        this.isFolder = isFolder;
-        this.contents = new LinkedList<>();
-    }
-
-    public void addchild(final Day07 childNode) {
-        this.contents.add(childNode);
-    }
-
-    private Day07 moveInto(final Day07 currentDirectory, final String name)
-    {
-        for (Day07 folder : currentDirectory.contents) {
-            if (folder.name.equals(name) && folder.isFolder) {
-                return folder;
-            }
-        }
-        return null;
-
-    }
-    private Day07 findParent(final Day07 currentDirectory, final String id) {
-        if (currentDirectory.id.equals(id) && currentDirectory.isFolder) {
-            return currentDirectory;
-        }
-        for (Day07 folder : currentDirectory.contents.stream().filter(i -> i.isFolder).toList()) {
-            if (folder.id.equals(id)) {
-                return folder;
-            }
-            else {
-                Day07 found = findParent(folder, id);
-                if (found != null) {
-                    return found;
-                }
-            }
-        }
-        return null;
-    }
-
-    private void updateFolderSize(Day07 folder) {
-        folder.size = 0;
-        for (Day07 item : folder.contents) {
-            folder.size += item.size;
-        }
-
-        directorySizes.put(folder.id, folder.size);
-
-    }
-
     public int getTotalSizeUnder(int underSize) {
         return directorySizes.values()
                 .stream()
@@ -138,6 +74,63 @@ public class Day07 {
                 .mapToInt(integer -> integer).toArray()[0];
     }
 
+    class Directory {
+        final String id;
+        final String name;
+        private int size;
+        final List<Directory> contents;
+        final String parent;
+        final boolean isFolder;
+
+        Directory(String name, int size, String parent, boolean isFolder) {
+            this.id = UUID.randomUUID().toString();
+            this.name = name;
+            this.size = size;
+            this.parent = parent;
+            this.isFolder = isFolder;
+            this.contents = new ArrayList<>();
+        }
+        public void addchild(final Directory childNode) {
+            this.contents.add(childNode);
+        }
+
+        private Directory findParent(final String id) {
+            if (this.id.equals(id) && this.isFolder) {
+                return files;
+            }
+            for (Directory folder : this.contents.stream().filter(i -> i.isFolder).toList()) {
+                if (folder.id.equals(id)) {
+                    return folder;
+                }
+                else {
+                    Directory found = folder.findParent(id);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+            return null;
+        }
+        private Directory moveInto(final String name) {
+            for (Directory folder : this.contents.stream().filter(i -> i.isFolder).toList()) {
+                if (folder.name.equals(name)) {
+                    return folder;
+                }
+            }
+            return null;
+        }
+
+        private void updateFolderSize() {
+            this.size = 0;
+            for (Directory item : this.contents) {
+                this.size += item.size;
+            }
+
+            directorySizes.put(this.id, this.size);
+
+        }
+
+    }
 
 
 }
