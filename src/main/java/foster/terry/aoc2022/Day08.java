@@ -33,7 +33,7 @@ public class Day08 {
         List<Integer> scores = new ArrayList<>();
         for (int y = 0; y < treeGrid.size(); y++) {
             for (int x = 0; x < treeGrid.get(y).size(); x++) {
-                scores.add((checkTopTreesSeen(x,y) + 1) * checkBottomTreesSeen(x,y) * checkLeftTreesSeen(x,y) * checkRightTreesSeen(x,y));
+                scores.add(checkTopTreesSeen(x,y) * checkBottomTreesSeen(x,y) * checkLeftTreesSeen(x,y) * checkRightTreesSeen(x,y));
             }
         }
 
